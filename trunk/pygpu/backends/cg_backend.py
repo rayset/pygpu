@@ -10,7 +10,7 @@ import pygpu.compiler.variable ## isConstant, isSwizzle
 from pygpu.GPU.infer import *
 
 
-class CgBackend:
+class CgBackend(object):
     context = None
     profile = None
     cacheDirectory = '.cg_cache'
@@ -46,7 +46,7 @@ class CgBackend:
 def cgGetErrors():
     yield cgGetError()
     
-class CgFunctionWrapper:
+class CgFunctionWrapper(object):
     def __init__(self, path, topEntry, returnType, argList):
         self.program = cgCreateProgramFromFile(CgBackend.context,
                                                CG_SOURCE,
@@ -89,7 +89,6 @@ class CgFunctionWrapper:
 
     def release(self):
         cgGLDisableProfile(CgBackend.profile)
-
         
     def bind_samplerRECT(self, cgParam, im):
         cgGLSetTextureParameter(cgParam, im.texNo)
@@ -106,10 +105,12 @@ class CgFunctionWrapper:
     def bind_float3(self, cgParam, (x,y,z)):
         cgGLSetParameter3f(cgParam, x, y, z)
 
+    def _getSource(self):
+        return cgGetProgramString(self.program, CG_PROGRAM_SOURCE)
         
         
 
-class CgCodeGen:
+class CgCodeGen(object):
     def __init__(self, output):
         self.indentation = 0
         self.output = output

@@ -1,7 +1,7 @@
 
 from copy import copy
 
-class Stack:
+class Stack(object):
     def __init__(self):
         self.repr = []
 
