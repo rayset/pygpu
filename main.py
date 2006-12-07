@@ -1,3 +1,8 @@
+##
+# main program for testing PyGPU's functionality
+#
+#
+
 import sys, numpy
 
 import pygame
@@ -16,7 +21,7 @@ from pygpu.types import *
 initPyGPU()
 
 
-#@gpu
+# @gpu
 def f1(x=Int):
     if x < 0:
         x = 0

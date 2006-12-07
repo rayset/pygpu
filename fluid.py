@@ -17,7 +17,7 @@ initPyGPU()
 
 crossSamples = numpy.array([(1,0), (-1,0), (0,1), (0,-1)]) 
 
-## @gpu
+# @gpu
 def divergence(x,p):
     r,l,t,b = [x(p+o) for o in crossSamples]
     return r[0] + t[1] - l[0] - b[1]
