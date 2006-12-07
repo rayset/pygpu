@@ -1,4 +1,15 @@
 
+__name__ = 'pygpu.__init__'
+__author__ = 'Calle Lejdfors <calle.lejdfors@cs.lth.se>'
+
+## This is the documantation for the top-level module of PyGPU
+#
+# Here there is some more information
+#
+# @author Calle Lejdfors <calle.lejdfors@cs.lth.se>
+#
+#
+
 __all__ = ['initPyGPU',
            'gpu',
            'loadImage'
@@ -13,6 +24,9 @@ import pygpu.backends
 
 from pyglew import *
 
+## Initialization function for PyGPU
+#
+#
 def initPyGPU(backend=None):
     ## !!FIXME!! More goo goes here!
     ## pygpu.GPU.selectFramebuffer()

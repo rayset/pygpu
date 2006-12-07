@@ -2,6 +2,10 @@
 
 all:
 
+doc: pygpu/*.py pygpu/*/*.py 
+	tools/pythondoc.py -f -Dstyle=pygpu-doc.css fluid.py pygpu
+	mv pythondoc-*.html doc
+
 dist: clean-pyc MANIFEST
 	python setup.py sdist --formats=zip
 
@@ -14,4 +18,4 @@ clean: clean-pyc
 clean-pyc:
 	rm -f `find -name "*.pyc"`
 
-.PHONY: clean-pyc MANIFEST
+.PHONY: clean-pyc MANIFEST doc
