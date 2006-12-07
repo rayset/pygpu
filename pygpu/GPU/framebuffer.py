@@ -17,7 +17,7 @@ else:
     raise RuntimeError("Cannot find a supported framebuffer implementation!")
 
 
-class FramebufferWrapper:
+class FramebufferWrapper(object):
     def __init__(self, framebuffer, cacheStack):
         self.framebuffer = framebuffer
         self.cacheStack = cacheStack
@@ -45,7 +45,7 @@ class FramebufferWrapper:
         self.framebuffer.show()
 
 
-class FramebufferFactory:
+class FramebufferFactory(object):
     cache = {}
 
     @staticmethod

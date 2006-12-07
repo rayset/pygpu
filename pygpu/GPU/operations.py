@@ -16,7 +16,7 @@ def comparisonType(l,r):
         return pygpu.GPU.gputypes.Bool
 
 
-class GPUOp:
+class GPUOp(object):
     def __init__(self, name, *args):
         self.name = name
         self.args = args

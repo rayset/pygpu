@@ -57,7 +57,7 @@ class GPUFunction(object):
        
     
 
-class GPUFunctionHelper:
+class GPUFunctionHelper(object):
     def __init__(self, **kwords):
         self.kwords = kwords
 

@@ -10,6 +10,7 @@ import pygpu.GPU.functions
 from pygpu.GPU.gputypes import *
 from pygpu.GPU.infer import typeOf
 from pygpu.GPU.utils import *
+from pygpu.utils import *
 from pygpu.GPU.operations import *
 from pygpu.exceptions import PyGPUException
 
@@ -19,7 +20,7 @@ cmp_op = (GPULt, GPULe, GPUEq, GPUNe, GPUGt, GPUGe,
 def mangle(name):
     return name.replace('+', '_')
 
-class PyGPUInterpreter:
+class PyGPUInterpreter(object):
     def compile(self, func, args = None):
         co = func.func_code
         defaults = func.func_defaults
@@ -56,26 +57,33 @@ class PyGPUInterpreter:
                 block.args.append(var)
                 
         else:
-            if defaults:
-                defaultOffset = co.co_argcount-len(defaults)
+            n = len(defaults)
+            constArgs, varArgs = args[:-n], args[-n:]
 
-                ## Verify that the passed types are correct
-                for arg, argI in zip(args,argIndices):
-                    l = argI-defaultOffset
-                    if l >= 0:
-                        if arg.type is None:
-                            arg.type = defaults[l]
-                        else:
-                            assert arg.type == defaults[l]
-                    self.locals[argI] = arg
-            else:
-                for arg, argI in zip(args, argIndices):
-                    self.locals[argI] = arg
+            names = co.co_varnames[len(constArgs):-n-1]
+            
+            for arg, type in zip(args[-n:], defaults):
+                print arg.type, type
 
-            block.args = args
-                
+            argI = 0
+            for ca in constArgs:
+                self.locals[argI] = ca
+                argI += 1
+
+                # mangle block name when we're generatively
+                # evaluating a function
+                block.name += "_%s" % (id(ca)) 
+
+            ## Verify that the passed types are correct
+            for arg, type in zip(varArgs, defaults):
+                assert arg.type == type
+                self.locals[argI] = arg
+                argI += 1
+
+            block.args = varArgs
+
+            
         self.currentLocals = {}
-
         self.constants = co.co_consts
         
 
@@ -196,6 +204,7 @@ class PyGPUInterpreter:
             except Exception, e:
                 print "When trying to call %s: %s" % (f, e)
                 sys.exit(1)
+
         else:
             try:
                 result = f.emit_call(block, *args)
@@ -204,10 +213,11 @@ class PyGPUInterpreter:
                 funcBlock = interp.compile(f, args)
                 block.addFunction(funcBlock)
 
+
                 ## !!FIXME!! implement multiple return functions (can be mapped
                 ## via out-variables)
                 result = TemporaryVariable(funcBlock.returnType)
-                block.add(GPUCall(result, funcBlock.name, args))
+                block.add(GPUCall(result, funcBlock.name, funcBlock.args))
 
         stack.push(result)
 

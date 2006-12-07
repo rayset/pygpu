@@ -6,7 +6,7 @@ from pygpu.GPU.infer import typeOf
 from pygpu.GPU.gputypes import *
 from pygpu.GPU.operations import *
 
-class DummyIterator:
+class DummyIterator(object):
     def __init__(self, type, start, stop, step):
         self.done = False
         self.start = start
@@ -21,7 +21,7 @@ class DummyIterator:
             self.done = True
             return obj
 
-class range:
+class range(object):
     def __init__(self, start, stop, step):
         self.start = start
         self.stop = stop
@@ -42,19 +42,21 @@ class range:
 
         return range(start, stop, step)
 
-class sqrt:
+class sqrt(object):
     def __init__(self, x):
         self.var = x
         
     @staticmethod
     def emit_call(block, x):
-        return sqrt(x)
+        tmp = TemporaryVariable(x.type)
+        block.add(GPUCall(tmp, "sqrt", [x]))
+        return tmp
     
     @staticmethod
     def call(x):
         return numpy.sqrt(x)
 
-class sum:
+class sum(object):
     @staticmethod
     def emit_call(block, x):
         #if len(x) == 0:
@@ -87,7 +89,7 @@ def unify(t1, t2):
         raise TypeError("cannot unify types '%s' and '%s'" % (t1,t2))
         
 
-class mul:
+class mul(object):
     @staticmethod
     def emit_call(block, l, r):
         try:
@@ -99,7 +101,7 @@ class mul:
         block.add(GPUMul(tmp, cast(l, t), cast(r, t)))
         return tmp
 
-class div:
+class div(object):
     @staticmethod
     def emit_call(block, l, r):
         try:
@@ -111,7 +113,7 @@ class div:
         block.add(GPUDiv(tmp, cast(l, t), cast(r, t)))
         return tmp
 
-class pow:
+class pow(object):
     @staticmethod
     def emit_call(block, l, r):
         assert typeOf(r) == Int
@@ -120,7 +122,7 @@ class pow:
         return tmp
 
 
-class round:
+class round(object):
     @staticmethod
     def call(x):
         t = typeOf(x)
@@ -138,7 +140,7 @@ class round:
         return tmp
 
 
-class floor:
+class floor(object):
     @staticmethod
     def call(x):
         t = typeOf(x)
@@ -155,7 +157,7 @@ class floor:
         block.add(GPUCall(tmp, "floor", [x]))
         return tmp
 
-class frac:
+class frac(object):
     @staticmethod
     def call(x):
         raise NotImplementedError()
@@ -166,7 +168,7 @@ class frac:
         block.add(GPUCall(tmp, "frac", [x]))
         return tmp
 
-class abs:
+class abs(object):
     @staticmethod
     def call(x):
         raise NotImplementedError()
@@ -178,7 +180,7 @@ class abs:
         return tmp
 
     
-class lerp:
+class lerp(object):
     @staticmethod
     def call(x):
         raise NotImplementedError()
@@ -192,7 +194,7 @@ class lerp:
 
 
 
-class float2:
+class float2(object):
     @staticmethod
     def call(x, y):
         return Constant([x,y], Float2)
@@ -203,7 +205,7 @@ class float2:
         block.add(GPUCall(tmp, "float2", [x, y]))
         return tmp
 
-class float3:
+class float3(object):
     @staticmethod
     def call(x, y, z):
         return Constant([x,y,z], Float3)
@@ -214,7 +216,7 @@ class float3:
         block.add(GPUCall(tmp, "float3", [x, y, z]))
         return tmp
 
-class float4:
+class float4(object):
     @staticmethod
     def call(x, y, z, w):
         return Constant([x,y,z,w], Float4)
