@@ -128,18 +128,11 @@ while True:
 
     glClear(GL_COLOR_BUFFER_BIT)
 
-    #v,p = fluidStep(v,p)
-    #p.show()
-    #p.show()
-    dt = 0.5 ##clock.get_time()/1000.0
+    dt = 0.5
+    # dt = clock.get_time()/1000.0
     if dt > 0.0:
         v,p = fluidStep(v, p, dt)
         p.show()
-#    print "FPS:", clock.get_fps()
-    #    res = myDiv(0.1, p)
-    #    res.show()
-
-    ##    
     
     pygame.display.flip()
 

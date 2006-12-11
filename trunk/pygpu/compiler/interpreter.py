@@ -76,15 +76,23 @@ class PyGPUInterpreter(object):
                 var = ArgumentVariable(name, t)
                 self.locals[argI] = var
                 block.args.append(var)
+
+        elif defaults is None:
+            argI = 0
+            for arg in args:
+                print arg, arg.type
+                if hasattr(arg, 'type'):
+                    self.locals[argI] = arg
+                    block.args.append(arg)
+                else:
+                    self.locals[argI] = arg
+                    block.name += "_%s" % (id(ca)) 
                 
+                argI += 1
+            
         else:
             n = len(defaults)
             constArgs, varArgs = args[:-n], args[-n:]
-
-            names = co.co_varnames[len(constArgs):-n-1]
-            
-            for arg, type in zip(args[-n:], defaults):
-                print arg.type, type
 
             argI = 0
             for ca in constArgs:
