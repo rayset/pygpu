@@ -1,9 +1,12 @@
 
+import numpy
+
 import pygame
 from pyglew import *
 
 from pygpu.utils.property import propget
 from pygpu.GPU.framebuffer import Framebuffer
+from pygpu.GPU.gputypes import RGBImage, RGBAImage
 
 class ImageBase(object):
     def __init__(self):
@@ -140,6 +143,7 @@ class Image(ImageBase):
 
 
 
+
 def loadImage(path, imageType):
     surface = pygame.image.load(path)
 
@@ -157,3 +161,32 @@ def loadImage(path, imageType):
     data = pygame.image.tostring(surface, mode, True)
 
     return Image(imageType, data, format, surface.get_size())
+
+
+def imageFromArray(array):
+    assert len(numpy.shape(array)) == 3
+    w,h,nColors = numpy.shape(array)
+
+    if nColors == 3:
+        type = RGBImage
+        format = GL_RGB
+    elif nColors == 4:
+        type = RGBAImage
+        format = GL_RGBA
+    else:
+        raise ValueError("Could not deduce number of color channels in the array!")
+    
+    dtype = array.dtype
+    if dtype == numpy.uint8:
+        dataType = GL_UNSIGNED_BYTE
+    elif dtype == numpy.int8:
+        dataType = GL_BYTE
+    elif dtype == numpy.int32:
+        dataType = GL_INT
+    elif dtype == numpy.float32:
+        dataType = GL_FLOAT
+    else:
+        raise ValueError("Unknown datatype in array!")
+
+    data = array.ravel().tostring()
+    return Image(type, data, format, (w,h), dataType)
