@@ -1,3 +1,11 @@
+"""
+@namespace pygpu::compiler::interpreter
+
+This contain the bytecode interpreter part of the PyGPU
+framework. This is the heart of the entire system and it is
+responsible for translating CPython bytecode into an intermediary
+language that can be passed to the backend. 
+"""
 
 import sys, types, string, operator, traceback, dis
 from opcode import *
@@ -20,8 +28,25 @@ cmp_op = (GPULt, GPULe, GPUEq, GPUNe, GPUGt, GPUGe,
 def mangle(name):
     return name.replace('+', '_')
 
+
+## \class PyGPUInterpreter 
+#
+# This is the main class responsible for translating CPython bytecode
+# into the intermediary format of PyGPU.  
+#
+# @bug Results of a compilation should be cached to avoid
+# recompilation when a function is called twice from a (other) function
+
 class PyGPUInterpreter(object):
+    ## Compiles a single function and all it's callees.
+    #
+    #@arg \a func A Python function that should be annotated with type information
+    #@arg \a args If a function is called recursively, this argument
+    #          holds the arguments with which the function was
+    #          called. Otherwise it is None.
     def compile(self, func, args = None):
+        """
+        """
         co = func.func_code
         defaults = func.func_defaults
         self.func = func
@@ -29,10 +54,6 @@ class PyGPUInterpreter(object):
         self.code = co.co_code
         self.locals = [LocalVariable(co.co_varnames[i]) for i in range(co.co_nlocals)]
 
-        #print "***", func.func_name, "***"
-        #dis.dis(func)
-        #print 
-        
         block = Block(func.func_name)
         stack = Stack()
 
@@ -97,6 +118,14 @@ class PyGPUInterpreter(object):
 
         return block
 
+    ## The actual bytecode processing function
+    # 
+    # Processes bytecode starting from \a starti and stopping at \a
+    # endi (or at the end if \a endi is None). The \a stack parameter
+    # is used to hold values in the computation. The \a block parameter
+    # is the block for which we are currently generating intermediate
+    # code. 
+    #
     def interpret(self, stack, block, starti, endi = None):
         code = self.code
         
@@ -213,7 +242,6 @@ class PyGPUInterpreter(object):
                 funcBlock = interp.compile(f, args)
                 block.addFunction(funcBlock)
 
-
                 ## !!FIXME!! implement multiple return functions (can be mapped
                 ## via out-variables)
                 result = TemporaryVariable(funcBlock.returnType)
@@ -227,16 +255,16 @@ class PyGPUInterpreter(object):
     def FOR_ITER(self, stack, block, oparg):
         it = stack.pop()
 
-        ## unpack the next STORE_FAST instruction
+        # unpack the next STORE_FAST instruction
         i = self.index
         c1 = ord(self.code[i])
         if opname[c1] == "STORE_FAST":
-            ## only one loop variable
+            # only one loop variable
             oparg1 = ord(self.code[i+1]) + ord(self.code[i+2])*256
             iterVars = [self.locals[oparg1]]
             
         elif opname[c1] == "UNPACK_SEQUENCE":
-            ## multiple loop variables
+            # multiple loop variables
             noLoopVars = ord(self.code[i+1]) + ord(self.code[i+2])*256
             iterVars = noLoopVars*[None]
             for j in range(noLoopVars):
@@ -426,8 +454,6 @@ class PyGPUInterpreter(object):
     def LIST_APPEND(self, stack, block, oparg):
         l,v = map(self.lookup, stack.popN(2))
         l.append(v)
-        #print l
-        ## stack.push(l)
 
     def DELETE_FAST(self, stack, block, oparg):
         self.locals[oparg] = None
