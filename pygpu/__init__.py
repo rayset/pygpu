@@ -1,5 +1,5 @@
 
-__name__ = 'pygpu.__init__'
+__name__ = 'pygpu'
 __author__ = 'Calle Lejdfors <calle.lejdfors@cs.lth.se>'
 
 ## This is the documantation for the top-level module of PyGPU
@@ -12,17 +12,19 @@ __author__ = 'Calle Lejdfors <calle.lejdfors@cs.lth.se>'
 
 __all__ = ['initPyGPU',
            'gpu',
-           'loadImage'
+           'loadImage',
+           'imageFromArray'           
            ]
 
-from copy import copy
+import copy 
 
 from pygpu.compiler import PyGPUInterpreter
-from pygpu.GPU.image import loadImage
+from pygpu.GPU.image import *
 from pygpu.GPU.framebuffer import FramebufferFactory
 import pygpu.backends
 
 from pyglew import *
+
 
 ## Initialization function for PyGPU
 #
@@ -76,7 +78,7 @@ class GPUFunctionHelper(object):
         self.kwords = kwords
 
     def __call__(self, *args, **kwords):
-        kwords2 = copy(self.kwords)
+        kwords2 = copy.copy(self.kwords)
         kwords2.update(kwords)
         return gpu(*args, **kwords2)
 
