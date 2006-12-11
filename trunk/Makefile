@@ -2,9 +2,8 @@
 
 all:
 
-doc: pygpu/*.py pygpu/*/*.py 
-	tools/pythondoc.py -f -Dstyle=pygpu-doc.css fluid.py pygpu
-	mv pythondoc-*.html doc
+doc: 
+	doxygen Doxyfile
 
 dist: clean-pyc MANIFEST
 	python setup.py sdist --formats=zip

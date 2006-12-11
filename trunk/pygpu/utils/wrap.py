@@ -1,4 +1,8 @@
 
+__name__ = 'pygpu.utils.wrap'
+__author__ = 'Calle Lejdfors <calle.lejdfors@cs.lth.se>'
+
+
 class wrapWithHelper(object):
     def __init__(self, wrapper, f):
         self.wrapper = wrapper
