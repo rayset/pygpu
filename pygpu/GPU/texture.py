@@ -1,5 +1,6 @@
 
-from pyglew import *
+from OpenGL.GL import *
+from glew import *
 
 from pygpu.utils.property import propget
 from pygpu.GPU.gputypes import *
@@ -36,7 +37,7 @@ class Texture(object):
 
     def __del__(self):
         if hasattr(self, 'texNo'):
-            glDeleteTextures(1, [self.texNo])
+            glDeleteTextures([self.texNo])
 
     def bind(self, texUnit=0):
         glActiveTextureARB(GL_TEXTURE0_ARB + texUnit)

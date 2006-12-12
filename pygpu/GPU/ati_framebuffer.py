@@ -1,7 +1,7 @@
 
 import numpy
 
-from pyglew import *
+from glew import *
 from Cg import *
 
 from pygpu.backends.cg_backend import CgBackend

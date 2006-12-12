@@ -1,7 +1,7 @@
 
 import numpy
 
-from pyglew import *
+from glew import *
 from Cg import *
 
 from pygpu.backends.cg_backend import CgBackend
@@ -58,7 +58,7 @@ class NVIDIAFramebuffer(Texture):
         self.bind()
             
         w,h = size
-        self.frameBuffer = glGenFramebuffersEXT(1);
+        self.frameBuffer = glGenFramebuffersEXT(1)
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, self.frameBuffer);
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT,
                                   GL_COLOR_ATTACHMENT0_EXT,

@@ -2,7 +2,8 @@
 import numpy
 
 import pygame
-from pyglew import *
+from OpenGL.GL import *
+from glew import *
 
 from pygpu.utils.property import propget
 from pygpu.GPU.framebuffer import Framebuffer

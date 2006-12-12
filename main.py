@@ -7,7 +7,10 @@ import sys, numpy
 
 import pygame
 from pygame.locals import *
-from pyglew import *
+from OpenGL.GL import *
+from glew import *
+
+## print globals()
 
 pygame.display.init()
 surface = pygame.display.set_mode((512,512), OPENGL|DOUBLEBUF)

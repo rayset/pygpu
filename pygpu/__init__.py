@@ -57,7 +57,7 @@ from pygpu.GPU.image import *
 from pygpu.GPU.framebuffer import FramebufferFactory
 import pygpu.backends
 
-from pyglew import *
+from glew import *
 
 
 ## Initialization function for PyGPU
