@@ -1,0 +1,24 @@
+* Implemenet @gpu to handle size transformations. Perhaps some kind of
+  overridable partial application is needed. (done!)
+
+* Implement wrapping for allt types at the level of
+  pygpu.compiler.interpreter so that the type of an object can be
+  accessed via the type-member.  (need to extend type-space with
+  Python types such as sequences and functions, better to keep the
+  python types except when emitting PyGPU functions?) 
+
+* Implement recursive compilation (partially done, not properly tested!)
+
+* Implement differently sized framebuffers with caching (see ATI-compatability)
+
+* Complete Cg backend (partially done!)
+
+* Implement both 1D and 2D image processing modes
+
+* Implement tests/examples using dynamic branches (simple done!)
+
+* Implement ATI-compatability
+
+* Correct line-number reporting and better error messages
+
+* Implement 16-bit mode (maybe?)

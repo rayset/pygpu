@@ -1,0 +1,3 @@
+
+class PyGPUException(Exception):
+    pass
