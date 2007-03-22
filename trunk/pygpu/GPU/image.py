@@ -134,7 +134,7 @@ class Image(ImageBase):
         self.data = data
         self.size = size
         self.format = format
-        self.internalFormat = Framebuffer.typeToOpenGL(type.storageType, 8)
+        self.internalFormat = Framebuffer.typeToOpenGL(type.storageType, 32)
         self.dataType = dataType
         self.target = target
 
@@ -188,5 +188,6 @@ def imageFromArray(array):
     else:
         raise ValueError("Unknown datatype in array!")
 
-    data = array.ravel().tostring()
-    return Image(type, data, format, (w,h), dataType)
+    #data = array.ravel().tostring()
+    #return Image(type, data, format, (w,h), dataType)
+    return Image(type, array, format, (w,h), dataType)

@@ -8,7 +8,7 @@ class Texture(object):
     @staticmethod
     def typeToOpenGL(type):
         if type == Float:
-            return GL_R
+            return GL_RED
         elif type == Float2:
             ## return GL_RG
             raise RuntimeError("Cannot have float2-textures!")
