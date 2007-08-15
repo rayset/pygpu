@@ -19,14 +19,14 @@ try:
     from pyglew import *
 except:
     print """Unable to import pyglew.
-    You need to install PyGLEW (www.cs.lth.se/~calle/pygpu2/) in order to use PyGPU!""" 
+    You need to install PyGLEW (www.cs.lth.se/~calle/pygpu/) in order to use PyGPU!""" 
     sys.exit(1)
 
 try:
     import Cg
 except:
     print """Unable to import pycg.
-    You need to install PyCG (www.cs.lth.se/~calle/pygpu2/) in order to use PyGPU!""" 
+    You need to install PyCG (www.cs.lth.se/~calle/pygpu/) in order to use PyGPU!""" 
     sys.exit(1)
 
 try:
@@ -50,7 +50,7 @@ try:
     from pygpu.types import *
 except:
     print """Unable to import pygpu.
-    You need to install PyGPU (www.cs.lth.se/~calle/pygpu2/)!""" 
+    You need to install PyGPU (www.cs.lth.se/~calle/pygpu/)!""" 
     sys.exit(1)
 
 initPyGPU()
